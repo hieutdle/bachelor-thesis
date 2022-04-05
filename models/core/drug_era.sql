@@ -13,11 +13,11 @@ WITH PreDrugTarget AS(
             date_add(drug_exposure_start_datetime,INTERVAL 1 DAY)
         ) AS drug_exposure_end_datetime
     FROM {{ref('drug_exposure')}} d
-        INNER JOIN {{source('optimized_data_warehouse','concept_ancestor')}} ca ON ca.descendant_concept_id = d.drug_concept_id
-        INNER JOIN {{source('optimized_data_warehouse','concept')}} c ON ca.ancestor_concept_id = c.concept_id
+        INNER JOIN {{source('optimized_data_warehouse','concept_ancestor')}} ca ON CAST(ca.descendant_concept_id AS STRING) = CAST(d.drug_concept_id AS STRING)
+        INNER JOIN {{source('optimized_data_warehouse','concept')}} c ON CAST(ca.ancestor_concept_id AS STRING)= CAST(c.concept_id AS STRING)
         WHERE c.vocabulary_id = 'RxNorm' 
         AND c.concept_class_id = 'Ingredient'
-        AND d.drug_concept_id != 0 
+        AND d.drug_concept_id != CAST(0 AS STRING)
         AND coalesce(d.days_supply,0) >= 0
 ), 
 SubExposureEndDates AS (
