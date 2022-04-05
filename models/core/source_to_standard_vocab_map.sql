@@ -18,10 +18,10 @@ select
     c1.invalid_reason AS target_invalid_reason,
     c1.standard_concept AS target_standard_concept
   FROM
-    {{source('transformed_data_warehouse','concept')}} c
-    JOIN {{source('transformed_data_warehouse','concept_relationship')}} cr 
+    {{source('optimized_data_warehouse','concept')}} c
+    JOIN {{source('optimized_data_warehouse','concept_relationship')}} cr 
     ON c.concept_id = cr.concept_id_1
     AND cr.invalid_reason IS NULL
     AND lower(cr.relationship_id) = 'maps to'
-    JOIN {{source('transformed_data_warehouse','concept')}} c1 ON cr.concept_id_2 = c1.concept_id
+    JOIN {{source('optimized_data_warehouse','concept')}} c1 ON cr.concept_id_2 = c1.concept_id
     AND c1.invalid_reason IS NULL

@@ -18,4 +18,4 @@ SELECT
     c.invalid_reason AS target_invalid_reason,
     c.standard_concept AS target_standard_concept
   FROM
-    {{source('transformed_data_warehouse','concept')}} c
+    {{source('optimized_data_warehouse','concept')}} c
