@@ -12,4 +12,7 @@ bachelor-thesis
 |   | scripts                            # Support Code for Airflow
 |   
 └───ce_setup                             # Shell Script for Compute Engine Application installation
+|                           
+| 
+└───superset                             # SQL Scripts for Visualization
 ```
