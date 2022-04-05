@@ -13,6 +13,7 @@ bachelor-thesis
 |   
 └───ce_setup                             # Shell Script for Compute Engine Application installation
 |                           
-| 
 └───superset                             # SQL Scripts for Visualization
+|                           
+└───datahub                              # Config file for datahub
 ```
