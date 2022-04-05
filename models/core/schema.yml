@@ -1,0 +1,23 @@
+version: 2
+
+sources:
+    - name: raw_data_warehouse
+      database: bachelor-thesis-344103
+      schema: raw_data_warehouse
+    
+      tables:
+        - name: patients
+        - name: encounters
+        - name: conditions
+        - name: procedures
+        - name: observations
+        - name: medications
+        - name: immunizations
+  
+    - name: optimized_data_warehouse
+      database: bachelor-thesis-344103
+      schema: optimized_data_warehouse
+      tables:
+        - name: concept
+        - name: concept_relationship
+        - name: concept_ancestor
