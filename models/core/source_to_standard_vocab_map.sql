@@ -20,8 +20,8 @@ select
   FROM
     {{source('optimized_data_warehouse','concept')}} c
     JOIN {{source('optimized_data_warehouse','concept_relationship')}} cr 
-    ON c.concept_id = cr.concept_id_1
+    ON c.concept_id = CAST(cr.concept_id_1 as STRING)
     AND cr.invalid_reason IS NULL
     AND lower(cr.relationship_id) = 'maps to'
-    JOIN {{source('optimized_data_warehouse','concept')}} c1 ON cr.concept_id_2 = c1.concept_id
+    JOIN {{source('optimized_data_warehouse','concept')}} c1 ON CAST(cr.concept_id_2 AS STRING)= c1.concept_id
     AND c1.invalid_reason IS NULL

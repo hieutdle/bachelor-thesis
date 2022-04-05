@@ -102,13 +102,13 @@ with tmp as (
         null
         from {{source('raw_data_warehouse','immunizations')}} i
         left join {{ref('source_to_standard_vocab_map')}}   srctostdvm
-        on srctostdvm.source_code             = i.code
+        on srctostdvm.source_code             = CAST(i.code AS STRING)
         and srctostdvm.target_domain_id        = 'Drug'
         and srctostdvm.source_vocabulary_id    = 'CVX'
         and srctostdvm.target_standard_concept = 'S'
         and (srctostdvm.target_invalid_reason IS NULL OR srctostdvm.target_invalid_reason = '')
         left join {{ref('source_to_source_vocab_map')}} srctosrcvm
-        on srctosrcvm.source_code             = i.code
+        on srctosrcvm.source_code             = CAST(i.code AS STRING)
         and srctosrcvm.source_vocabulary_id    = 'CVX'
         left join {{ref('final_visit_ids')}} fv
         on fv.encounter_id = i.encounter
