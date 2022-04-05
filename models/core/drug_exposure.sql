@@ -3,7 +3,7 @@
 with tmp as (
     select
         p.person_id,
-        coalesce(srctostdvm.target_concept_id,0) as drug_concept_id,
+        coalesce(srctostdvm.target_concept_id,CAST(0 AS STRING)) as drug_concept_id,
         CAST(c.start AS TIMESTAMP) AS drug_exposure_start_date,
         CAST(c.start AS TIMESTAMP) AS drug_exposure_start_datetime,
         coalesce(CAST(c.stop AS TIMESTAMP),CAST(c.start AS TIMESTAMP)) AS drug_exposure_end_date,
@@ -21,18 +21,18 @@ with tmp as (
         fv.visit_occurrence_id_new AS visit_occurrence_id,
         0 as visit_detail_id,
         c.code AS drug_source_value,
-        coalesce(srctosrcvm.source_concept_id,0) AS drug_source_concept_id,
+        coalesce(srctosrcvm.source_concept_id,CAST(0 AS STRING)) AS drug_source_concept_id,
         null as  route_source_value,
         null as  dose_unit_source_value
         from {{source('raw_data_warehouse','conditions')}} c
         join {{ref('source_to_standard_vocab_map')}}   srctostdvm
-        on srctostdvm.source_code             = c.code
+        on srctostdvm.source_code             = CAST(c.code as STRING)
         and srctostdvm.target_domain_id        = 'Drug'
         and srctostdvm.source_vocabulary_id    = 'RxNorm'
         and srctostdvm.target_standard_concept = 'S'
         and (srctostdvm.target_invalid_reason IS NULL OR srctostdvm.target_invalid_reason = '')
         left join {{ref('source_to_source_vocab_map')}} srctosrcvm
-        on srctosrcvm.source_code             = c.code
+        on srctosrcvm.source_code             = CAST(c.code AS STRING)
         and srctosrcvm.source_vocabulary_id    = 'RxNorm'
         left join {{ref('final_visit_ids')}} fv
         on fv.encounter_id = c.encounter
@@ -41,7 +41,7 @@ with tmp as (
         union all
         select
         p.person_id,
-        coalesce(srctostdvm.target_concept_id,0) as drug_concept_id,
+        coalesce(srctostdvm.target_concept_id,CAST(0 AS STRING)) as drug_concept_id,
         CAST(m.start AS TIMESTAMP),
         CAST(m.start AS TIMESTAMP),
         coalesce(CAST(m.stop AS TIMESTAMP),CAST(m.start AS TIMESTAMP)),
@@ -59,18 +59,18 @@ with tmp as (
         fv.visit_occurrence_id_new AS visit_occurrence_id,
         0,
         m.code,
-        coalesce(srctosrcvm.source_concept_id,0),
+        coalesce(srctosrcvm.source_concept_id,CAST(0 AS STRING)),
         null,
         null 
         from {{source('raw_data_warehouse','medications')}} m
         join {{ref('source_to_standard_vocab_map')}}   srctostdvm
-        on srctostdvm.source_code             = m.code
+        on srctostdvm.source_code             = CAST(m.code AS STRING)
         and srctostdvm.target_domain_id        = 'Drug'
         and srctostdvm.source_vocabulary_id    = 'RxNorm'
         and srctostdvm.target_standard_concept = 'S'
         and (srctostdvm.target_invalid_reason IS  NULL OR srctostdvm.target_invalid_reason = '')
         left join {{ref('source_to_source_vocab_map')}} srctosrcvm
-        on srctosrcvm.source_code             = m.code
+        on srctosrcvm.source_code             = CAST(m.code AS STRING)
         and srctosrcvm.source_vocabulary_id    = 'RxNorm'
         left join {{ref('final_visit_ids')}} fv
         on fv.encounter_id = m.encounter
@@ -79,7 +79,7 @@ with tmp as (
         union all
         select
         p.person_id,
-        coalesce(srctostdvm.target_concept_id,0) as drug_concept_id,
+        coalesce(srctostdvm.target_concept_id,CAST(0 AS STRING)) as drug_concept_id,
         CAST(i.date as TIMESTAMP),
         CAST(i.date as TIMESTAMP),
         CAST(i.date as TIMESTAMP),
@@ -97,18 +97,18 @@ with tmp as (
         fv.visit_occurrence_id_new AS visit_occurrence_id,
         0,
         i.code,
-        coalesce(srctosrcvm.source_concept_id,0),
+        coalesce(srctosrcvm.source_concept_id,CAST(0 AS STRING)),
         null,
         null
         from {{source('raw_data_warehouse','immunizations')}} i
         left join {{ref('source_to_standard_vocab_map')}}   srctostdvm
-        on srctostdvm.source_code             = i.code
+        on srctostdvm.source_code             = CAST(i.code AS STRING)
         and srctostdvm.target_domain_id        = 'Drug'
         and srctostdvm.source_vocabulary_id    = 'CVX'
         and srctostdvm.target_standard_concept = 'S'
         and (srctostdvm.target_invalid_reason IS NULL OR srctostdvm.target_invalid_reason = '')
         left join {{ref('source_to_source_vocab_map')}} srctosrcvm
-        on srctosrcvm.source_code             = i.code
+        on srctosrcvm.source_code             = CAST(i.code AS STRING)
         and srctosrcvm.source_vocabulary_id    = 'CVX'
         left join {{ref('final_visit_ids')}} fv
         on fv.encounter_id = i.encounter
