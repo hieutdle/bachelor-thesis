@@ -1,6 +1,6 @@
 Architecture
 
-
+https://github.com/ledinhtrunghieu/bachelor-thesis/blob/main/structure.png
 
 Project structure
 
